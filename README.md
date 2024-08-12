@@ -26,6 +26,9 @@ Second, you need to add a push button between GND and a digital IO pin of your R
 However, as the "Pico" does not have an on-board RGB LED, you need to add one as well.
 - For the cheap "YD-RP2040" board no additional button is needed, as there is alreay a `USR` button at `GP24`.
 
+![yksim](otp-keys-01.jpg)
+
+
 This push button serves dual purposes:
 - Pressing the button starts the computation of a YubiKey OTP token, which gets send to your PC via USB as a series of keyboard codes.
 'Yubico' has selected the so-called 'modhex' encoding, to ensure that "YubiKeys" are compatible with most keyboard layouts.
