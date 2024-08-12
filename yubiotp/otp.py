@@ -17,14 +17,14 @@ True
 True
 """
 from binascii import hexlify
-from datetime import datetime
+from adafruit_datetime import datetime
 from random import randrange
 from struct import pack, unpack
 
-from Crypto.Cipher import AES
+import aesio
 
-from .crc import crc16, verify_crc16
-from .modhex import is_modhex, modhex, unmodhex
+from yubiotp.crc import crc16, verify_crc16
+from yubiotp.modhex import is_modhex, modhex, unmodhex
 
 __all__ = ['decode_otp', 'encode_otp', 'OTP', 'YubiKey', 'CRCError']
 
@@ -60,8 +60,10 @@ def decode_otp(token, key):
     public_id, token = token[:-32], token[-32:]
 
     buf = unmodhex(token)
-    buf = AES.new(key, AES.MODE_ECB).decrypt(buf)
-    otp = OTP.unpack(buf)
+    out = bytearray(len(buf))
+    cipher = aesio.AES(key, aesio.MODE_ECB)
+    cipher.decrypt_into(buf, out)
+    otp = OTP.unpack(out)
 
     return (public_id, otp)
 
@@ -90,8 +92,10 @@ def encode_otp(otp, key, public_id=b''):
         raise ValueError('public_id may be no longer than 32 modhex characters')
 
     buf = otp.pack()
-    buf = AES.new(key, AES.MODE_ECB).encrypt(buf)
-    token = modhex(buf)
+    out = bytearray(len(buf))
+    cipher = aesio.AES(key, aesio.MODE_ECB)
+    cipher.encrypt_into(buf, out)
+    token = modhex(out)
 
     return public_id + token
 
@@ -154,7 +158,7 @@ class OTP(object):
             self.rand,
         )
 
-        buf = pack('<6s H BH B H', *fields)
+        buf = pack('<6sHBHBH', *fields)
 
         crc = ~crc16(buf) & 0xFFFF
         buf += pack('<H', crc)
@@ -173,7 +177,7 @@ class OTP(object):
         if not verify_crc16(buf):
             raise CRCError('OTP checksum is invalid')
 
-        uid, session, t1, t2, counter, rand, crc = unpack('<6s H BH B H H', buf)
+        uid, session, t1, t2, counter, rand, crc = unpack('<6sHBHBHH', buf)
 
         timestamp = (t2 << 8) | t1
 

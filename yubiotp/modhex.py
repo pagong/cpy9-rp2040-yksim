@@ -9,7 +9,7 @@ which uses keyboard-independent characters.
 """
 
 from binascii import hexlify, unhexlify
-from functools import partial
+from circuitpython_functools import partial
 import struct
 
 __all__ = ['modhex', 'unmodhex', 'is_modhex', 'hex_to_modhex', 'modhex_to_hex']
@@ -96,7 +96,7 @@ def modhex_to_hex(modhex_str):
 
 
 def int2byte(i):
-    return struct.Struct(">B").pack(i)
+    return struct.pack(">B", i)
 
 
 def lookup(alist, key):
