@@ -1,8 +1,12 @@
-# Test YKSIM with JSON file io
+# YubiKey simulator YKSIM for RP2040 boards.
+# Uses the local filesystem, an USR button, USB-HID keyboard and RGB NeoPixel LED.
+#
+# For 'WaveShare' RP2040-One or RP2040-Zero:
+# - USR button is at GP29
+# - NeoPixel is at GP16
 
 import json
 
-DIR = "/yk-ids"
 DEF = "default"
 SFX = ".json"
 
@@ -19,34 +23,38 @@ def write_json_dict(filepath, object):
 
 #################
 
-dfltfile = DIR + "/" + DEF + SFX
+# Put "/default.json" into root directory
+dfltfile = "/" + DEF + SFX
 defaults = read_json_dict(dfltfile)
 
-cfgfile = defaults["directory"] + defaults["config"] + defaults["public"] + SFX
+# Get location of config directory from "default.json": this is usually "/yk-ids".
+DIR = defaults["directory"]
+
+cfgfile = DIR + defaults["config"] + defaults["public"] + SFX
 ykcfg = read_json_dict(cfgfile)
 
-sesfile = defaults["directory"] + ykcfg["session"] + ykcfg["public"] + SFX
+sesfile = DIR + ykcfg["session"] + ykcfg["public"] + SFX
 sesctr = read_json_dict(sesfile)
 
 #################
 
+# These modules are in the "/yubiotp" directory.
 from yubiotp.otp import OTP, encode_otp, decode_otp, YubiKey
 from yubiotp.modhex import is_modhex, modhex, unmodhex
 
 #################
 
 def update_session(counter):
-    #global sesctr, sesfile
-    sesctr["counter"] = counter
+    sesctr["counter"] = str(counter)
     try:
         write_json_dict(sesfile, sesctr)
     except Exception as e:
         #print(e)
         pass
 
-aeskey = ykcfg["aeskey"].encode()
-private = ykcfg["private"].encode()
-public = ykcfg["public"].encode()
+aeskey = ykcfg["aeskey"].encode('ascii')
+private = ykcfg["private"].encode('ascii')
+public = ykcfg["public"].encode('ascii')
 
 session = int(sesctr["counter"]) + 1
 update_session(session)
@@ -130,3 +138,4 @@ while True:
         do_yksim()
         delay(WAIT)
         rgbled(BLUE)
+
