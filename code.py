@@ -41,7 +41,7 @@ def update_session(counter):
     try:
         write_json_dict(sesfile, sesctr)
     except Exception as e:
-        print(e)
+        #print(e)
         pass
 
 aeskey = ykcfg["aeskey"].encode()
@@ -59,9 +59,9 @@ YK1 = YubiKey(unmodhex(private), session, usage)
 def gen_token():
     global session    
     otp = YK1.generate()
-    print(str(otp))
+    #print(str(otp))
     token = encode_otp(otp, unmodhex(aeskey), public)
-    print(str(token))
+    #print(str(token))
     if YK1.session != session:
         session = YK1.session
         update_session(session)
@@ -116,7 +116,7 @@ def do_yksim():
     rgbled(GREEN)
     yktok = gen_token()
     keyboard.write(str(yktok, 'ascii') + "\n")
-    rgbled(BLUE)
+    rgbled(RED)
 
 #################
 
@@ -126,7 +126,7 @@ delay(WAIT)
 while True:
     switch.update()
     if not switch.value:
-        print("pressed")
+        #print("pressed")
         do_yksim()
         delay(WAIT)
-
+        rgbled(BLUE)
