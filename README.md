@@ -44,7 +44,7 @@ See this [learn](https://learn.adafruit.com/circuitpython-essentials/circuitpyth
 The YubiKey simulator should be able to simulate several, different YubiKeys.
 The configuration for the different YubiKeys is stored in the directory `/yk-ids` of the `CIRCUITPY` drive.
 
-There is a file called `default.json` to select which configuration gets used.
+There is a file called `/default.json` to select which configuration gets used.
 
 - When the _YKSIM_ device gets plugged into an USB port, it will turn on a `blue` LED to signal, that it is ready and waiting for user action.
 - When the `USR` button is pressed, the LED will turn `green` until the YubiKey OTP token has been sent as KB codes via USB-HID.
@@ -59,13 +59,14 @@ There is a file called `default.json` to select which configuration gets used.
 $ ls -l
 -rw-r--r-- 1 msd users  733 Aug 11 20:47 boot.py
 -rw-r--r-- 1 msd users 2723 Aug 12 02:12 code.py
-drwxr-xr-x 4 msd users 1024 Aug 10 07:05 examples
+-rw-r--r-- 1 msd users   81 Aug 11 19:08 default.json
 drwxr-xr-x 2 msd users 2048 Jan  1  2020 yk-ids
 drwxr-xr-x 2 msd users 1024 Aug 10 10:12 yubiotp
 
 $ tree
 ├── boot.py
 ├── code.py
+├── default.json
 ├── lib
 │   ├── adafruit_datetime.mpy
 │   ├── adafruit_debouncer.mpy
@@ -88,8 +89,7 @@ $ tree
 │   ├── config_vvuneduedrei.json
 │   ├── session_luftundliebe.json
 │   ├── session_vveinhundert.json
-│   ├── session_vvuneduedrei.json
-│   └── default.json
+│   └── session_vvuneduedrei.json
 └── yubiotp
     ├── crc.py
     ├── modhex.py
@@ -141,8 +141,6 @@ The YubiKey simulator is able to simulate several, different YubiKeys.
 The configurations for the different keys are stored in the directory `/yk-ids` of the `CIRCUITPY` drive.
 ``` bash
 $ ls -l yk-ids/
--rw-r--r-- 1 msd users  81 Aug 11 21:24 default.json
-
 -rw-r--r-- 1 msd users 133 Aug 11 21:28 config_luftundliebe.json
 -rw-r--r-- 1 msd users  15 Aug 11 21:03 session_luftundliebe.json
 
@@ -153,7 +151,7 @@ $ ls -l yk-ids/
 -rw-r--r-- 1 msd users  17 Jan  1  2020 session_vvuneduedrei.json
 ```
 
-There is a file called `default.json` to select which configuration (i.e. `publicid`) gets used.
+There is a file in the root directory called `/default.json` to select which configuration (i.e. `publicid`) gets used.
 ```
 {
   "directory": "/yk-ids/",
