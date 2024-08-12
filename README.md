@@ -21,10 +21,11 @@ page and select the version that is suitable for your module. If you are unfamil
 you should be starting at Adafruit's [learn](https://learn.adafruit.com/welcome-to-circuitpython/installing-circuitpython) page.
 
 Second, you need to add a push button between GND and a digital IO pin of your RP2040 board.
-- I've soldered one to Pin `GP29` and `GND` of the 'WaveShare' boards.
-- On the original "RasPi Pico" Pin `GP15` and `GND` are conveniently located at the end ot the module.
-However, as the "Pico" does not have an on-board RGB LED, you need to add one as well.
+- As you can see in the picture below, I've soldered one to Pin `GP29` and `GND` of the 'WaveShare' boards.
+- On the original "RasPi Pico" Pin `GP15` and `GND` are conveniently located at the end of the module.
+However, as the "Pico" does not have an on-board RGB LED, you need to add one externally as well.
 - For the cheap "YD-RP2040" board no additional button is needed, as there is alreay a `USR` button at `GP24`.
+This board comes with 16MB of flash and an on-board NeoPixel LED at `GP23`. (Which needs to be enabled with a solder jumper!)
 
 ![yksim](otp-keys-01.jpg)
 
@@ -41,7 +42,7 @@ See this [learn](https://learn.adafruit.com/circuitpython-essentials/circuitpyth
 
 ## Design
 The YubiKey simulator should be able to simulate several, different YubiKeys.
-The configuration for the different YubiKeys are stored in the directory `/yk-ids` of the `CIRCUITPY` drive.
+The configuration for the different YubiKeys is stored in the directory `/yk-ids` of the `CIRCUITPY` drive.
 
 There is a file called `default.json` to select which configuration gets used.
 
@@ -125,7 +126,7 @@ drwxr-xr-x 1 msd users   270 Aug  9 23:52 adafruit_hid
 ### YubiKey algorithm
 For the YubiKey algorithm an implementation written in CPython by [django-otp](https://github.com/django-otp/yubiotp)
 has been re-used and adapted for CircuitPython. These routines are located in the `/yubiotp` directory.
-Some libraries and functions have different names and parameters (e.g. `aesio`). 
+Some libraries and functions of CircuitPython have different names and parameters (e.g. `aesio`).  
 (And CircuitPython does NOT like blanks in the format strings of `struct.pack` and `struct.unpack` either !!)
 
 ``` bash
@@ -137,7 +138,7 @@ $ ls -l yubiotp/
 
 ### Configuration
 The YubiKey simulator is able to simulate several, different YubiKeys.
-The configuration for the different keys are stored in the directory `/yk-ids` of the `CIRCUITPY` drive.
+The configurations for the different keys are stored in the directory `/yk-ids` of the `CIRCUITPY` drive.
 ``` bash
 $ ls -l yk-ids/
 -rw-r--r-- 1 msd users  81 Aug 11 21:24 default.json
@@ -152,7 +153,7 @@ $ ls -l yk-ids/
 -rw-r--r-- 1 msd users  17 Jan  1  2020 session_vvuneduedrei.json
 ```
 
-There is a file called `default.json` to select which configuration gets used.
+There is a file called `default.json` to select which configuration (i.e. `publicid`) gets used.
 ```
 {
   "directory": "/yk-ids/",
@@ -161,8 +162,8 @@ There is a file called `default.json` to select which configuration gets used.
 }
 ```
 
-For each YubiKey there are two files in this directory: `config_<publicid>.json` and `session_<publicid>.json`
-The `<publicid>` matches the "Public Id" of the YubiKey algoritm.
+For each simulated YubiKey there are two files in the `/yk-ids` directory: `config_<publicid>.json` and `session_<publicid>.json`.
+The `<publicid>` matches the "Public Id" of the YubiKey algorithm.
 ```
 {
   "public": "luftundliebe",
@@ -179,4 +180,6 @@ Whereas the file `session_<publicid>.json` gets rewritten each time, when the se
 {"counter": 42}
 ```
 
+## Caveat!
+As the `aeskey` in the config file is not protected by cryptography, the _YKSIM_ is not a very secure device!
 
