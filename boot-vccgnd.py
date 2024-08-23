@@ -1,21 +1,21 @@
 """
 boot.py file for Pico data logging example.
 
-- If pin GP29 is NOT connected to GND when the pico starts up,
+- If pin GP24 is NOT connected to GND when the pico starts up,
   make the filesystem writeable by CircuitPython.
-- If pin GP29 is connected to GND when the pico starts up,
+- If pin GP24 is connected to GND when the pico starts up,
   make the filesystem writeable via USB.
 
 https://learn.adafruit.com/getting-started-with-raspberry-pi-pico-circuitpython/data-logger
 """
 
-# for Waveshare RP2040-One
+# for VCC-GND RP-2040
 
 import board
 import digitalio
 import storage
 
-WRpin = digitalio.DigitalInOut(board.GP29)
+WRpin = digitalio.DigitalInOut(board.BUTTON)
 WRpin.direction = digitalio.Direction.INPUT
 WRpin.pull = digitalio.Pull.UP
 
