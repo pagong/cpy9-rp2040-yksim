@@ -5,9 +5,3 @@ __pycache__/
 /MANIFEST
 /build/
 /dist/
-/docs/build/
-*.egg-info/
-
-# Other tools
-/.coverage
-/.tox/

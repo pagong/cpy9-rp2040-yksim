@@ -9,7 +9,7 @@ I wanted to learn about CircuitPython and at the same time use the "RasPi Pico" 
 I've used the "RP2040-One" and "RP2040-Zero" boards (by 'WaveShare') during development of _YKSIM_.
 Both modules are tiny in size and have an on-board NeoPixel LED.
 
-Other RP2040 boards can also be used, but then `code.py` needs to be adapted to their GPIO pin layouts.
+Other RP2040 boards can also be used, but then `code.py` and `boot.py` need to be adapted to their GPIO pin layouts.
 
 The _YKSIM_ implementation makes use of the USB-HID keyboard features of CircuitPython.
 Each button press generates a new YubiKey OTP token, which gets send to your connected PC.
